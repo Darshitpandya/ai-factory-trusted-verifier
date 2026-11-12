@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
+  "packageManager": "pnpm@9.14.2",
   "description": "Independently owned trusted verifier — oasdiff-based OpenAPI compatibility check, GitHub App, protected policies",
   "license": "Apache-2.0",
   "engines": { "node": ">=22.0.0" },
