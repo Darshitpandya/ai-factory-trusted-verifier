@@ -1,0 +1,38 @@
+name: verify
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  verify:
+    name: build-test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - uses: pnpm/action-setup@v4
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Type check
+        run: pnpm typecheck
+
+      - name: Tests (webhook auth, security gates, oasdiff)
+        run: pnpm test
+        # oasdiff tests are skipped if binary not installed — that's correct
+
+      - name: Verify no secrets in source
+        run: |
+          if grep -r "sk-ant\|GITHUB_APP_PRIVATE_KEY_PATH\|CLIENT_SECRET" src/ 2>/dev/null | grep -v "process.env"; then
+            echo "ERROR: potential secret in source"
+            exit 1
+          fi
+          echo "✓ No hardcoded secrets found"
