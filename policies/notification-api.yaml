@@ -1,0 +1,6 @@
+compatibilityBaselinePath: contracts/events/notification-requested.schema.json
+proposedSpecPath: contracts/events/notification-requested.schema.json
+tenantIsolationRequired: false
+piiPolicies:
+  - pii-must-be-redacted-in-logs
+  - no-pii-in-retry-payloads

@@ -1,0 +1,31 @@
+{
+  "name": "ai-factory-trusted-verifier",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Independently owned trusted verifier — oasdiff-based OpenAPI compatibility check, GitHub App, protected policies",
+  "license": "Apache-2.0",
+  "engines": { "node": ">=22.0.0" },
+  "scripts": {
+    "start": "tsx src/server.ts",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --ext .ts",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@octokit/app": "^14.0.0",
+    "@octokit/rest": "^20.0.0",
+    "fastify": "^4.28.0",
+    "@fastify/formbody": "^7.4.0",
+    "js-yaml": "^4.1.0",
+    "pg": "^8.12.0"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^22.0.0",
+    "@types/pg": "^8.11.0",
+    "typescript": "^5.5.0",
+    "tsx": "^4.16.0",
+    "vitest": "^2.0.0"
+  }
+}

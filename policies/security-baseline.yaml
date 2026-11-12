@@ -1,0 +1,11 @@
+requiredChecks:
+  - factory-contract/acceptance
+
+forbiddenPatterns:
+  - hardcoded_secret
+  - base64_secret
+  - password_in_code
+
+mandatoryAnnotations:
+  - tenantIsolation
+  - apiCompatibility

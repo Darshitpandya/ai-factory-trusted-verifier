@@ -1,0 +1,42 @@
+version: "3.9"
+services:
+  verifier:
+    build:
+      context: ..
+      dockerfile: containers/verifier.Dockerfile
+    ports:
+      - "3002:3002"
+    environment:
+      VERIFIER_DATABASE_URL: postgresql://verifier:verifier@verifier-db:5432/verifier
+      VERIFIER_APP_ID: ${VERIFIER_APP_ID}
+      VERIFIER_APP_PRIVATE_KEY_PATH: /run/secrets/verifier_app_key
+      VERIFIER_WEBHOOK_SECRET: ${VERIFIER_WEBHOOK_SECRET}
+      ALLOWED_REPOS: ${ALLOWED_REPOS}
+      OASDIFF_BINARY: /usr/local/bin/oasdiff
+    secrets:
+      - verifier_app_key
+    depends_on:
+      verifier-db:
+        condition: service_healthy
+    restart: on-failure
+
+  verifier-db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: verifier
+      POSTGRES_PASSWORD: verifier
+      POSTGRES_DB: verifier
+    volumes:
+      - verifier_db:/var/lib/postgresql/data
+      - ../db/migrations/001_init.sql:/docker-entrypoint-initdb.d/001.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U verifier"]
+      interval: 5s
+      retries: 10
+
+secrets:
+  verifier_app_key:
+    file: ${VERIFIER_APP_PRIVATE_KEY_PATH}
+
+volumes:
+  verifier_db:

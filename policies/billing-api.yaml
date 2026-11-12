@@ -1,0 +1,12 @@
+compatibilityBaselinePath: openapi/openapi.yaml
+proposedSpecPath: openapi/openapi.yaml
+tenantIsolationRequired: true
+piiPolicies:
+  - no-raw-pii-in-logs
+  - tenant-scoped-data-only
+
+# The verifier fetches this file at the base SHA (protected branch HEAD)
+# and at the PR head SHA separately — the baseline is NEVER the PR-modified version.
+
+# A PR that adds a required query parameter to an existing endpoint (e.g., tenant_id on
+# GET /v1/invoices) WILL fail this check and be blocked from merging.
