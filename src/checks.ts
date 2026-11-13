@@ -18,13 +18,14 @@ export interface CheckRunOptions {
   }>;
 }
 
-// The check name is fixed — it must match the GitHub branch protection required check name.
 export const CHECK_NAME = "factory-contract/acceptance";
 
 export async function publishCheckRun(opts: CheckRunOptions): Promise<{ checkRunId: number }> {
   const kit = await getInstallationKit(opts.installationId);
 
-  const res = await kit.checks.create({
+  // Use kit.request() directly — installation Octokit from @octokit/app
+  // doesn't include REST namespace plugins, only the base request method
+  const res = await kit.request("POST /repos/{owner}/{repo}/check-runs", {
     owner: opts.owner,
     repo: opts.repo,
     name: CHECK_NAME,
@@ -40,7 +41,7 @@ export async function publishCheckRun(opts: CheckRunOptions): Promise<{ checkRun
     },
   });
 
-  return { checkRunId: res.data.id };
+  return { checkRunId: (res.data as { id: number }).id };
 }
 
 export async function createInProgressCheck(
@@ -50,7 +51,7 @@ export async function createInProgressCheck(
   headSha: string
 ): Promise<number> {
   const kit = await getInstallationKit(installationId);
-  const res = await kit.checks.create({
+  const res = await kit.request("POST /repos/{owner}/{repo}/check-runs", {
     owner,
     repo,
     name: CHECK_NAME,
@@ -62,5 +63,5 @@ export async function createInProgressCheck(
       summary: "Checking API compatibility and policy compliance...",
     },
   });
-  return res.data.id;
+  return (res.data as { id: number }).id;
 }
