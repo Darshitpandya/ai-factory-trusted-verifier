@@ -66,7 +66,11 @@ import {
 import { createHash } from "crypto";
 
 const app = Fastify({ logger: true, trustProxy: true });
-const pool = new Pool({ connectionString: process.env["VERIFIER_DATABASE_URL"] });
+const dbUrl = process.env["VERIFIER_DATABASE_URL"] ?? "";
+const pool = new Pool({
+  connectionString: dbUrl,
+  ssl: dbUrl.includes("railway") || dbUrl.includes(".proxy.rlwy.") ? { rejectUnauthorized: false } : false,
+});
 
 const ALLOWED_REPOS = (process.env["ALLOWED_REPOS"] ?? "").split(",").filter(Boolean);
 const PROTECTED_PATHS = [".github/", "policies/", "src/", "containers/"];
