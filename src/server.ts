@@ -264,7 +264,7 @@ app.get("/debug/app", async () => {
   try {
     const verifierApp = getVerifierApp();
     const { data } = await verifierApp.octokit.request("GET /app");
-    return { ok: true, appName: data.name, appId: data.id, oasdiff: isOasdiffAvailable() };
+    return { ok: true, appName: (data as { name?: string; id?: number } | null)?.name ?? "?", appId: (data as { name?: string; id?: number } | null)?.id ?? 0, oasdiff: isOasdiffAvailable() };
   } catch(e: unknown) {
     return { ok: false, error: String(e), keyEnvSet: !!process.env["VERIFIER_APP_PRIVATE_KEY_CONTENT"], appIdSet: !!process.env["VERIFIER_APP_ID"] };
   }
