@@ -140,7 +140,9 @@ app.post("/webhook", {
         owner, repo, fullName, headSha, baseSha, prNumber, installationId, deliveryId
       });
     } catch (e) {
-      app.log.error(`Verification failed for ${fullName}#${prNumber}: ${e}`);
+      const errMsg = String(e);
+      lastVerificationError = errMsg;
+      app.log.error(`Verification failed for ${fullName}#${prNumber}: ${errMsg}`);
     }
   });
 });
@@ -280,3 +282,7 @@ app.listen({ port, host }, async (err) => {
   app.log.info(`Trusted verifier listening on ${host}:${port}`);
   app.log.info(`oasdiff available: ${isOasdiffAvailable()}`);
 });
+
+// ── Debug: last verification error ───────────────────────────────────────────
+let lastVerificationError = "";
+app.get("/debug/last-error", async () => ({ error: lastVerificationError }));
