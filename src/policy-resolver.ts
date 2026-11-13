@@ -14,20 +14,26 @@ export interface RepoPolicy {
  * Policy is NEVER loaded from the PR head — always from the protected verifier repo.
  */
 export function loadPolicy(repoName: string): RepoPolicy {
-  const policyPath = path.join("policies", `${repoName}.yaml`);
+  // Try exact repo name match first, then short name
+  const candidates = [
+    path.join("policies", `${repoName}.yaml`),
+    path.join("policies", `${repoName.replace(/^factory-reference-/, "")}.yaml`),
+  ];
 
-  if (!existsSync(policyPath)) {
-    // Fall back to security baseline
-    const baseline = path.join("policies", "security-baseline.yaml");
-    if (existsSync(baseline)) {
-      const content = yaml.load(readFileSync(baseline, "utf-8")) as RepoPolicy;
+  for (const policyPath of candidates) {
+    if (existsSync(policyPath)) {
+      const content = yaml.load(readFileSync(policyPath, "utf-8")) as RepoPolicy;
       return content;
     }
-    throw new Error(`No policy found for repo: ${repoName}`);
   }
 
-  const content = yaml.load(readFileSync(policyPath, "utf-8")) as RepoPolicy;
-  return content;
+  // Fall back to security baseline
+  const baseline = path.join("policies", "security-baseline.yaml");
+  if (existsSync(baseline)) {
+    const content = yaml.load(readFileSync(baseline, "utf-8")) as RepoPolicy;
+    return content;
+  }
+  throw new Error(`No policy found for repo: ${repoName}`);
 }
 
 /**

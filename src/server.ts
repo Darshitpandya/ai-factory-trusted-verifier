@@ -73,7 +73,7 @@ const pool = new Pool({
 });
 
 const ALLOWED_REPOS = (process.env["ALLOWED_REPOS"] ?? "").split(",").filter(Boolean);
-const PROTECTED_PATHS = [".github/", "policies/", "src/", "containers/"];
+const PROTECTED_PATHS = [".github/workflows/", ".factory/repository-contract.yaml"];
 
 // ── Webhook endpoint ─────────────────────────────────────────────────────────
 
