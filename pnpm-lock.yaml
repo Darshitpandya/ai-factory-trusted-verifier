@@ -17,6 +17,9 @@ importers:
       '@octokit/rest':
         specifier: ^20.0.0
         version: 20.1.2
+      dotenv:
+        specifier: ^18.0.10
+        version: 18.0.10
       fastify:
         specifier: ^4.28.0
         version: 4.29.1
@@ -746,6 +749,11 @@ packages:
 
   deprecation@2.3.1:
     resolution: {integrity: sha512-xmHIy4F3scKVwMsQ4WnVaS8bHOx0DmVwRywosKhaILI0ywMDWPtBSku2HNxRvF7jtwDRsoEwYQSfbxj8b7RlJQ==}
+
+  dotenv@18.0.10:
+    resolution: {integrity: sha512-89FAA1xchzK2mxVWdr5F/0rldwiueXs6zJM86rO66EzekR1iBdiXRthyG+m5GvkJaFH3C2LESzamTkgndmLT2A==}
+    engines: {node: '>=12'}
+    hasBin: true
 
   ecdsa-sig-formatter@1.0.11:
     resolution: {integrity: sha512-nagl3RYrbNv6kQkeJIpt6NJZy8twLB/2vtz6yN9Z4vRKHN4/QZJIEbqohALSgwKdnksuY3k5Addp5lg8sVoVcQ==}
@@ -1695,6 +1703,8 @@ snapshots:
   deep-eql@5.0.2: {}
 
   deprecation@2.3.1: {}
+
+  dotenv@18.0.10: {}
 
   ecdsa-sig-formatter@1.0.11:
     dependencies:

@@ -1,3 +1,4 @@
+import "dotenv/config";
 /**
  * Trusted Verifier Server
  *
