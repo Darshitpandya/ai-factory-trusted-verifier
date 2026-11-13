@@ -44,7 +44,7 @@ export function compareOpenApi(
     // Get oasdiff version for evidence
     let oasdiffVersion = "unknown";
     try {
-      oasdiffVersion = execFileSync(oasdiff, ["version"], { encoding: "utf-8" }).trim();
+      oasdiffVersion = execFileSync(oasdiff, ["--version"], { encoding: "utf-8" }).trim();
     } catch {}
 
     // Run breaking change detection — fixed arguments, no user input
@@ -94,7 +94,7 @@ export function compareOpenApi(
 export function isOasdiffAvailable(): boolean {
   const binary = process.env["OASDIFF_BINARY"] ?? "oasdiff";
   try {
-    execFileSync(binary, ["version"], { encoding: "utf-8", timeout: 5_000 });
+    execFileSync(binary, ["--version"], { encoding: "utf-8", timeout: 5_000 });
     return true;
   } catch {
     return false;
