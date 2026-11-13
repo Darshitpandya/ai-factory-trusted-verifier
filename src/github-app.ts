@@ -55,9 +55,14 @@ export async function fetchFileAtSha(
   ref: string
 ): Promise<string> {
   const kit = await getInstallationKit(installationId);
-  const res = await kit.repos.getContent({ owner, repo, path, ref });
-  if (Array.isArray(res.data) || res.data.type !== "file") {
+  // Use request() directly — installation Octokit lacks REST namespace plugins
+  const res = await kit.request("GET /repos/{owner}/{repo}/contents/{path}", {
+    owner, repo, path, ref,
+  });
+  const data = res.data as { type: string; content: string; encoding: string } | Array<unknown>;
+  if (Array.isArray(data) || (data as { type: string }).type !== "file") {
     throw new Error(`${path} is not a file at ${ref}`);
   }
-  return Buffer.from(res.data.content, "base64").toString("utf-8");
+  const fileData = data as { content: string; encoding: string };
+  return Buffer.from(fileData.content, "base64").toString("utf-8");
 }

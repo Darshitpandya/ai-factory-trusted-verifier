@@ -242,8 +242,11 @@ async function fetchChangedFiles(
 ): Promise<string[]> {
   const { getInstallationKit } = await import("./github-app.js");
   const kit = await getInstallationKit(installationId);
-  const res = await kit.pulls.listFiles({ owner, repo, pull_number: prNumber, per_page: 100 });
-  return res.data.map((f: { filename: string }) => f.filename);
+  // Use kit.request() — installation Octokit from @octokit/app lacks REST namespaces
+  const res = await kit.request("GET /repos/{owner}/{repo}/pulls/{pull_number}/files", {
+    owner, repo, pull_number: prNumber, per_page: 100,
+  });
+  return (res.data as Array<{ filename: string }>).map((f) => f.filename);
 }
 
 // ── Health check ─────────────────────────────────────────────────────────────
