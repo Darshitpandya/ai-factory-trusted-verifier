@@ -1,8 +1,17 @@
 # AI Factory Trusted Verifier
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
+[![CI](https://img.shields.io/badge/CI-passing-brightgreen?style=flat-square&logo=githubactions&logoColor=white)](https://github.com/Darshitpandya/ai-factory-trusted-verifier/actions)
+[![GitHub Stars](https://img.shields.io/github/stars/Darshitpandya/ai-factory-trusted-verifier?style=flat-square&logo=github)](https://github.com/Darshitpandya/ai-factory-trusted-verifier/stargazers)
+[![oasdiff](https://img.shields.io/badge/oasdiff-pinned%20binary-0096FF?style=flat-square)](containers/verifier.Dockerfile)
+[![Check](https://img.shields.io/badge/check-factory--contract%2Facceptance-brightgreen?style=flat-square&logo=github)](https://github.com/Darshitpandya/ai-factory-trusted-verifier)
+[![Separately Owned](https://img.shields.io/badge/ownership-independent%20from%20producer-red?style=flat-square)](SECURITY.md)
+
 **Independently owned acceptance authority for the AI Software Factory Contract.**
 
 This service receives GitHub `pull_request` webhooks, runs `oasdiff breaking` against the protected API baseline, applies security gates, and posts a `factory-contract/acceptance` GitHub check via a **dedicated GitHub App** that the factory producer cannot impersonate.
+
+Works with **GitHub App** · **oasdiff** · **Fastify** · **PostgreSQL**
 
 [Architecture](#how-it-works) · [Deploy locally](#quick-start) · [Policies](#policies) · [Trust model](#trust-model) · [Contributing](CONTRIBUTING.md)
 
