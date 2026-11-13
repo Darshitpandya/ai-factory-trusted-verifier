@@ -51,7 +51,7 @@ async function runMigrations(dbUrl: string): Promise<void> {
 }
 
 import { validateWebhookSignature } from "./webhook-auth.js";
-import { getInstallationId, fetchFileAtSha } from "./github-app.js";
+import { getInstallationId, fetchFileAtSha, getVerifierApp } from "./github-app.js";
 import { publishCheckRun, createInProgressCheck } from "./checks.js";
 import { compareOpenApi, isOasdiffAvailable } from "./compare-openapi.js";
 import { loadPolicy, loadSecurityBaseline } from "./policy-resolver.js";
