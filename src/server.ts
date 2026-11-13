@@ -213,7 +213,7 @@ app.get("/health", async () => {
 
 // ── Start ─────────────────────────────────────────────────────────────────────
 
-const port = parseInt(process.env["VERIFIER_PORT"] ?? "3002");
+const port = parseInt(process.env["PORT"] ?? process.env["VERIFIER_PORT"] ?? "3010");
 const host = process.env["VERIFIER_HOST"] ?? "0.0.0.0";
 
 app.listen({ port, host }, (err) => {

@@ -8,12 +8,20 @@ export function getVerifierApp(): App {
   if (_app) return _app;
   const appId = process.env["VERIFIER_APP_ID"];
   const keyPath = process.env["VERIFIER_APP_PRIVATE_KEY_PATH"];
-  if (!appId || !keyPath) {
-    throw new Error("VERIFIER_APP_ID and VERIFIER_APP_PRIVATE_KEY_PATH required");
+  // Support Railway-style inline key content (no file system mounting)
+  const keyContent = process.env["VERIFIER_APP_PRIVATE_KEY_CONTENT"];
+  if (!appId || (!keyPath && !keyContent)) {
+    throw new Error("VERIFIER_APP_ID and either VERIFIER_APP_PRIVATE_KEY_PATH or VERIFIER_APP_PRIVATE_KEY_CONTENT required");
   }
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { readFileSync } = require("fs") as typeof import("fs");
-  const privateKey = readFileSync(keyPath, "utf-8");
+  let privateKey: string;
+  if (keyContent) {
+    // Railway: key provided inline as env var, replace literal \n with newlines
+    privateKey = keyContent.replace(/\\n/g, "\n");
+  } else {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { readFileSync } = require("fs") as typeof import("fs");
+    privateKey = readFileSync(keyPath!, "utf-8");
+  }
   _app = new App({
     appId,
     privateKey,
