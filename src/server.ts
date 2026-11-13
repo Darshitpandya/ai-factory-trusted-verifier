@@ -11,6 +11,45 @@
 
 import Fastify from "fastify";
 import { Pool } from "pg";
+import { readFileSync, existsSync } from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+// ── Auto-migrate on startup ───────────────────────────────────────────────────
+async function runMigrations(dbUrl: string): Promise<void> {
+  const pool = new Pool({ connectionString: dbUrl, ssl: dbUrl.includes("railway") ? { rejectUnauthorized: false } : false });
+  try {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS verification_jobs (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        delivery_id TEXT UNIQUE NOT NULL,
+        owner TEXT NOT NULL, repo TEXT NOT NULL,
+        head_sha TEXT NOT NULL, base_sha TEXT NOT NULL,
+        pr_number INTEGER NOT NULL, installation_id BIGINT NOT NULL,
+        status TEXT NOT NULL CHECK (status IN ('PENDING','RUNNING','COMPLETED','FAILED')),
+        worker_id TEXT, conclusion TEXT,
+        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+        started_at TIMESTAMPTZ, completed_at TIMESTAMPTZ
+      );
+      CREATE TABLE IF NOT EXISTS processed_webhook_deliveries (
+        delivery_id TEXT PRIMARY KEY,
+        processed_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+      );
+      CREATE TABLE IF NOT EXISTS verification_evidence (
+        id TEXT PRIMARY KEY, job_id UUID,
+        owner TEXT, repo TEXT, head_sha TEXT,
+        conclusion TEXT, evidence_json JSONB,
+        evidence_hash TEXT, created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+      );
+    `);
+    console.log("Migrations applied");
+  } finally {
+    await pool.end();
+  }
+}
+
 import { validateWebhookSignature } from "./webhook-auth.js";
 import { getInstallationId, fetchFileAtSha } from "./github-app.js";
 import { publishCheckRun, createInProgressCheck } from "./checks.js";
@@ -216,8 +255,13 @@ app.get("/health", async () => {
 const port = parseInt(process.env["PORT"] ?? process.env["VERIFIER_PORT"] ?? "3010");
 const host = process.env["VERIFIER_HOST"] ?? "0.0.0.0";
 
-app.listen({ port, host }, (err) => {
+app.listen({ port, host }, async (err) => {
   if (err) { app.log.error(err); process.exit(1); }
+  // Run migrations after server starts
+  const dbUrl = process.env["VERIFIER_DATABASE_URL"] ?? "";
+  if (dbUrl) {
+    try { await runMigrations(dbUrl); } catch (e) { app.log.warn(`Migration warning: ${e}`); }
+  }
   app.log.info(`Trusted verifier listening on ${host}:${port}`);
   app.log.info(`oasdiff available: ${isOasdiffAvailable()}`);
 });

@@ -10,6 +10,7 @@
     "node": ">=22.0.0"
   },
   "scripts": {
+    "postinstall": "node -e \"const {execSync}=require('child_process');try{execSync('curl -sSL https://github.com/tufin/oasdiff/releases/download/v1.35.0/oasdiff_1.35.0_linux_amd64.tar.gz -o /tmp/oasdiff.tar.gz && tar -xzf /tmp/oasdiff.tar.gz -C /usr/local/bin oasdiff && chmod +x /usr/local/bin/oasdiff',{stdio:\\\"inherit\\\"});console.log('oasdiff installed')}catch(e){console.log('oasdiff install skipped:',e.message)}\"",
     "start": "dotenv -e .env -- tsx src/server.ts",
     "typecheck": "tsc --noEmit",
     "lint": "eslint . --ext .ts",
