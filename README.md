@@ -9,6 +9,8 @@
 
 **Independently owned acceptance authority for the AI Software Factory Contract.**
 
+**Live deployment:** `https://web-production-fff93264.up.railway.app` · Health: `/health` · oasdiff: `true`
+
 This service receives GitHub `pull_request` webhooks, runs `oasdiff breaking` against the protected API baseline, applies security gates, and posts a `factory-contract/acceptance` GitHub check via a **dedicated GitHub App** that the factory producer cannot impersonate.
 
 Works with **GitHub App** · **oasdiff** · **Fastify** · **PostgreSQL**
