@@ -1,7 +1,7 @@
 # AI Factory Trusted Verifier
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
-[![CI](https://img.shields.io/badge/CI-passing-brightgreen?style=flat-square&logo=githubactions&logoColor=white)](https://github.com/Darshitpandya/ai-factory-trusted-verifier/actions)
+[![CI](https://github.com/Darshitpandya/ai-factory-trusted-verifier/actions/workflows/verify.yml/badge.svg)](https://github.com/Darshitpandya/ai-factory-trusted-verifier/actions/workflows/verify.yml)
 [![GitHub Stars](https://img.shields.io/github/stars/Darshitpandya/ai-factory-trusted-verifier?style=flat-square&logo=github)](https://github.com/Darshitpandya/ai-factory-trusted-verifier/stargazers)
 [![oasdiff](https://img.shields.io/badge/oasdiff-pinned%20binary-0096FF?style=flat-square)](containers/verifier.Dockerfile)
 [![Check](https://img.shields.io/badge/check-factory--contract%2Facceptance-brightgreen?style=flat-square&logo=github)](https://github.com/Darshitpandya/ai-factory-trusted-verifier)
