@@ -3,30 +3,33 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
 [![CI](https://github.com/Darshitpandya/ai-factory-trusted-verifier/actions/workflows/verify.yml/badge.svg)](https://github.com/Darshitpandya/ai-factory-trusted-verifier/actions/workflows/verify.yml)
 [![GitHub Stars](https://img.shields.io/github/stars/Darshitpandya/ai-factory-trusted-verifier?style=flat-square&logo=github)](https://github.com/Darshitpandya/ai-factory-trusted-verifier/stargazers)
-[![oasdiff](https://img.shields.io/badge/oasdiff-pinned%20binary-0096FF?style=flat-square)](containers/verifier.Dockerfile)
-[![Check](https://img.shields.io/badge/check-factory--contract%2Facceptance-brightgreen?style=flat-square&logo=github)](https://github.com/Darshitpandya/ai-factory-trusted-verifier)
+[![oasdiff](https://img.shields.io/badge/oasdiff-v1.35.0%20pinned-0096FF?style=flat-square)](containers/verifier.Dockerfile)
+[![check](https://img.shields.io/badge/check-factory--contract%2Facceptance-brightgreen?style=flat-square&logo=github)](https://github.com/Darshitpandya/ai-factory-trusted-verifier)
 [![Separately Owned](https://img.shields.io/badge/ownership-independent%20from%20producer-red?style=flat-square)](SECURITY.md)
 
 **Independently owned acceptance authority for the AI Software Factory Contract.**
 
-**Live deployment:** `https://web-production-fff93264.up.railway.app` · Health: `/health` · oasdiff: `true`
+**Live:** `https://web-production-fff93264.up.railway.app/health` → `{"status":"ok","oasdiffAvailable":true}`
 
-This service receives GitHub `pull_request` webhooks, runs `oasdiff breaking` against the protected API baseline, applies security gates, and posts a `factory-contract/acceptance` GitHub check via a **dedicated GitHub App** that the factory producer cannot impersonate.
+Receives GitHub `pull_request` webhooks, runs `oasdiff breaking` against the protected API baseline, applies security gates, and posts `factory-contract/acceptance` via a **dedicated GitHub App** that the factory producer cannot impersonate.
 
-Works with **GitHub App** · **oasdiff** · **Fastify** · **PostgreSQL**
-
-[Architecture](#how-it-works) · [Deploy locally](#quick-start) · [Policies](#policies) · [Trust model](#trust-model) · [Contributing](CONTRIBUTING.md)
+[How it works](#how-it-works) · [Quick start](#quick-start) · [Policies](#policies) · [Trust model](#trust-model) · [Contributing](CONTRIBUTING.md)
 
 ---
 
 ## Why it is a separate repository
 
-A verifier that lives in the same repository as the factory producer does not provide independent acceptance. The factory producer could:
-- Modify the acceptance logic in the same PR that changes the code
-- Change policy files to weaken compatibility requirements
-- Use its own GitHub App token to post a passing check under the same name
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Darshitpandya/ai-software-factory-contract/main/docs/diagrams/s14-three-authorities-dark.png">
+  <img src="https://raw.githubusercontent.com/Darshitpandya/ai-software-factory-contract/main/docs/diagrams/s14-three-authorities-light.png" alt="Control, execution and acceptance are separate authorities" width="840">
+</picture>
 
-This repository is **separately owned**. The factory producer has no write access here. Branch protection on the consumer repos requires `factory-contract/acceptance` specifically from this App's identity — no other token can satisfy it.
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Darshitpandya/ai-software-factory-contract/main/docs/diagrams/s36-trust-boundary-dark.png">
+  <img src="https://raw.githubusercontent.com/Darshitpandya/ai-software-factory-contract/main/docs/diagrams/s36-trust-boundary-light.png" alt="Trust boundary: the producer cannot own its acceptance" width="840">
+</picture>
+
+A verifier in the same repository as the producer is not independent. The producer could modify acceptance logic, weaken policies, or post a passing check with its own App token. This repository is separately owned. Branch protection on consumer repos requires `factory-contract/acceptance` **from this App's identity** — no other token can satisfy it.
 
 ---
 
@@ -159,6 +162,13 @@ To add a new consumer repo:
 ---
 
 ## Trust model
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Darshitpandya/ai-software-factory-contract/main/docs/diagrams/s34-investigation-trace-dark.png">
+  <img src="https://raw.githubusercontent.com/Darshitpandya/ai-software-factory-contract/main/docs/diagrams/s34-investigation-trace-light.png" alt="Investigation trace: start at acceptance boundary, trace backward" width="840">
+</picture>
+
+The rejection is traced through contract artifacts, not a transcript. Start at the acceptance boundary and work backward: pull request → check → violation → diff → factory version + run record.
 
 The following properties must hold for the independent acceptance claim to be valid:
 
