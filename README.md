@@ -19,15 +19,11 @@ Receives GitHub `pull_request` webhooks, runs `oasdiff breaking` against the pro
 
 ## Why it is a separate repository
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Darshitpandya/ai-software-factory-contract/main/docs/diagrams/s14-three-authorities-dark.png">
-  <img src="https://raw.githubusercontent.com/Darshitpandya/ai-software-factory-contract/main/docs/diagrams/s14-three-authorities-light.png" alt="Control, execution and acceptance are separate authorities" width="840">
-</picture>
+<img src="https://raw.githubusercontent.com/Darshitpandya/ai-software-factory-contract/main/docs/diagrams/s14-three-authorities-light.png#gh-light-mode-only" alt="Control, execution and acceptance are separate authorities" width="840">
+<img src="https://raw.githubusercontent.com/Darshitpandya/ai-software-factory-contract/main/docs/diagrams/s14-three-authorities-dark.png#gh-dark-mode-only" alt="Control, execution and acceptance are separate authorities" width="840">
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Darshitpandya/ai-software-factory-contract/main/docs/diagrams/s36-trust-boundary-dark.png">
-  <img src="https://raw.githubusercontent.com/Darshitpandya/ai-software-factory-contract/main/docs/diagrams/s36-trust-boundary-light.png" alt="Trust boundary: the producer cannot own its acceptance" width="840">
-</picture>
+<img src="https://raw.githubusercontent.com/Darshitpandya/ai-software-factory-contract/main/docs/diagrams/s36-trust-boundary-light.png#gh-light-mode-only" alt="Trust boundary: the producer cannot own its acceptance" width="840">
+<img src="https://raw.githubusercontent.com/Darshitpandya/ai-software-factory-contract/main/docs/diagrams/s36-trust-boundary-dark.png#gh-dark-mode-only" alt="Trust boundary: the producer cannot own its acceptance" width="840">
 
 A verifier in the same repository as the producer is not independent. The producer could modify acceptance logic, weaken policies, or post a passing check with its own App token. This repository is separately owned. Branch protection on consumer repos requires `factory-contract/acceptance` **from this App's identity** — no other token can satisfy it.
 
@@ -163,10 +159,8 @@ To add a new consumer repo:
 
 ## Trust model
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Darshitpandya/ai-software-factory-contract/main/docs/diagrams/s34-investigation-trace-dark.png">
-  <img src="https://raw.githubusercontent.com/Darshitpandya/ai-software-factory-contract/main/docs/diagrams/s34-investigation-trace-light.png" alt="Investigation trace: start at acceptance boundary, trace backward" width="840">
-</picture>
+<img src="https://raw.githubusercontent.com/Darshitpandya/ai-software-factory-contract/main/docs/diagrams/s34-investigation-trace-light.png#gh-light-mode-only" alt="Investigation trace: start at acceptance boundary, trace backward" width="840">
+<img src="https://raw.githubusercontent.com/Darshitpandya/ai-software-factory-contract/main/docs/diagrams/s34-investigation-trace-dark.png#gh-dark-mode-only" alt="Investigation trace: start at acceptance boundary, trace backward" width="840">
 
 The rejection is traced through contract artifacts, not a transcript. Start at the acceptance boundary and work backward: pull request → check → violation → diff → factory version + run record.
 
