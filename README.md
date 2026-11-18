@@ -25,7 +25,7 @@ Receives GitHub `pull_request` webhooks, runs `oasdiff breaking` against the pro
 <img src="https://raw.githubusercontent.com/Darshitpandya/ai-software-factory-contract/main/docs/diagrams/s36-trust-boundary-light.png#gh-light-mode-only" alt="Trust boundary: the producer cannot own its acceptance" width="840">
 <img src="https://raw.githubusercontent.com/Darshitpandya/ai-software-factory-contract/main/docs/diagrams/s36-trust-boundary-dark.png#gh-dark-mode-only" alt="Trust boundary: the producer cannot own its acceptance" width="840">
 
-A verifier in the same repository as the producer is not independent. The producer could modify acceptance logic, weaken policies, or post a passing check with its own App token. This repository is separately owned. Branch protection on consumer repos requires `factory-contract/acceptance` **from this App's identity** — no other token can satisfy it.
+A verifier in the same repository as the producer is not independent. The producer could modify acceptance logic, weaken policies, or post a passing check with its own App token. This repository is separately owned. Branch protection on consumer repos requires `factory-contract/acceptance` **from this App's identity** - no other token can satisfy it.
 
 ---
 
@@ -57,7 +57,7 @@ GitHub pull_request event
         │
         ▼
   oasdiff breaking <base> <proposed> --format json
-  (pinned binary in Dockerfile — no user commands executed)
+  (pinned binary in Dockerfile - no user commands executed)
         │
         ▼
   Publish GitHub Check Run
@@ -142,7 +142,7 @@ After creating:
 
 ## Policies
 
-Policies live in `policies/` in **this repository**. They are loaded from the verifier's own protected branch at verification time — a PR in a consumer repo cannot change these.
+Policies live in `policies/` in **this repository**. They are loaded from the verifier's own protected branch at verification time - a PR in a consumer repo cannot change these.
 
 | File | Applies to | Key setting |
 |---|---|---|
@@ -171,7 +171,7 @@ The following properties must hold for the independent acceptance claim to be va
 | Webhook origin authenticity | HMAC-SHA256 over raw body; constant-time comparison |
 | No replay attacks | `X-GitHub-Delivery` persisted in PostgreSQL; duplicates ignored |
 | Policy cannot be tampered by PR | Policy loaded from verifier's own branch, never from PR head |
-| SHA binding — the right commit is being checked | head SHA verified against GitHub API, not trusted from webhook payload |
+| SHA binding - the right commit is being checked | head SHA verified against GitHub API, not trusted from webhook payload |
 | Protected paths cannot be weakened | `SG-001` blocks PRs that modify `.github/`, `policies/`, `src/`, `containers/` in consumer repos |
 | Producer cannot post a passing check | `factory-contract/acceptance` check requires this App's identity; producer App identity rejected by branch ruleset |
 | oasdiff binary not user-controlled | Pinned version in Dockerfile; file paths are fixed; no user-supplied shell commands run |
@@ -212,4 +212,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md). Changes to `src/`, `policies/`, or `cont
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT - see [LICENSE](LICENSE).
